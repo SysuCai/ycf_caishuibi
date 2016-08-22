@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript">
+		//交换排序--冒泡
+		var a = [3,9,2,1,5,2,8,5];
+
+		function bubbleSort(a){
+			var temp;
+			for(var i = 0; i < a.length ; i++){
+				for(var j = 0; j < a.length-i-1 ; j++){
+					if(a[j]>a[j+1]){
+						temp = a[j];
+						a[j] = a[j+1];
+						a[j+1] = temp;
+					}
+				}
+			}
+			console.log(a);
+		}
+
+	/*-----------------------------------------------------------------------*/
+		//归并排序
+		var a = [1,2,7,13];
+		var b = [3,5,7,9,11,17,18];
+
+		function mergeSort(a,b){
+			var c =[];
+			for(var i=0,j=0,k=0; k<a.length+b.length; k++){
+				if(a[i]<b[j]){
+					c[k]=a[i];
+					i++;
+				}
+				else{
+					c[k]=b[j];
+					j++;
+				}
+			}
+					return c;
+		}
+
+	/*-----------------------------------------------------------------------*/
+		//插入排序
+		//思想是将元素一个个插入
+		var a = [9,2,4,1];
+		function insertSort(a){
+			var temp;
+			for(var i = 0; i < a.length; i++){
+				temp = a[i];//插入项
+				for(var j = i; j > 0; j--){
+					//j-1当前选中对比项
+					if(temp<a[j-1]){
+						a[j]=a[j-1];
+						//检测边界
+						if(!(j-1)){
+							a[j-1]=temp;
+						}
+					}
+					else{
+						a[j]=temp;									
+						break;
+					}
+				}
+			}
+					console.log(a);
+		} 
+
+	/*-----------------------------------------------------------------------*/
+	var a = [9,4,5,3,1,7,100];
+	//选择排序	基本思想:每次选择当前最小值
+	//复杂度O(n^2)
+	function selectSort(a) {
+		var temp,mi;
+		for(var i = 0 ; i < a.length ; i++){
+			mi = i;
+			for(var j = i+1; j < a.length ; j++){
+				if(a[j] < a[mi]){
+					mi = j;
+				}
+			}
+
+			temp = a[i];
+			a[i] = a[mi];
+			a[mi] = temp;
+		}
+		console.log(a);
+	}
+
+	//希尔排序 （分组插入排序） 每次间隔[n/2，n/4，···,1]的元素单独进行插入排序
+	/*-----------------------------------------------------------------------*/
+	var a = [49,38,65,97,76,13,27,49,55,4];
+
+	function shellInsertSort(a, gap) {
+		var temp
+		for(var i = gap ; i < a.length ; i++){
+			if(a[i]<a[i-gap]){
+				temp = a[i];
+				var j = i-gap;
+				while(temp<a[j]){
+					a[j+gap] = a[j];
+					j -= gap; 
+				}
+				a[j+gap] = temp;
+			}
+		}
+	}
+
+	function shellSort(a) {
+		var gap = parseInt(a.length/2);
+		while(gap >= 1){
+			shellInsertSort(a, gap);
+			gap = parseInt(gap/2);
+		}
+		console.log(a);
+	}
+</script>
+<script type="text/javascript">
+	//堆排序
+	//两个步骤 1.建堆 2.调整
+	//建大顶堆，然后把堆顶元素放到队列后面
+	var a = [1,2,3,4,5];
+
+	function adjustHeap(a, i, length) {
+		arguments[2] = arguments[2]? arguments[2] : a.length;
+		var temp;
+		var child = 2*i + 1;
+		while(child < length) {
+			//选择子节点中较大的
+			if(child + 1 < length && a[child] < a[child+1]){
+				child++; 
+			}
+			//与父节点比较 选择替换
+			if(a[child] > a[i]){
+				temp = a[i];
+				a[i] = a[child];
+				a[child] = temp;
+				i = child;
+				child = 2*i + 1;
+			}
+			else {
+				break;
+			}
+		}
+		console.log(a);
+	}
+
+	function buildHeap(a) {
+		for(var i = parseInt(a.length/2)-1; i >= 0 ; i--){
+			adjustHeap(a, i, a.length);
+		}
+	}
+
+	function heapSort(a) {
+		buildHeap(a);
+		console.log('OK');
+
+		var temp;
+		for(var i = a.length-1; i > 0 ; i--) {
+			temp = a[i];
+			a[i] = a[0];
+			a[0] = temp;
+			adjustHeap(a, 0, i);
+		}
+		// console.log(a);
+	}
+
+	heapSort(a);
+
+</script>
+<script type="text/javascript">
+	//快排
+	//思想是将一个元素（通常是头或尾）选作基准元素，将队列划分为大的一边小的一边，这样这个元素就找到了他的位置，接下去递归
+	
+	a = [3,1,5,9,2,7];
+
+	function partition(a, bottom, top) {
+		var key = a[bottom];
+		var temp;
+		while(bottom < top) {
+			while(bottom < top && key <= a[top]) {
+				top--;}
+
+			temp = a[bottom];
+			a[bottom] = a[top];
+			a[top] = temp;
+
+			while(bottom < top && key >= a[bottom] ){
+				bottom++;
+			}
+
+			temp = a[bottom];
+			a[bottom] = a[top];
+			a[top] = temp;
+		}
+		return bottom;
+	}
+
+	function quickSort(a, bottom, top) {
+		if(bottom < top) {
+			var key = partition(a, bottom, top);
+			quickSort(a, bottom,key-1);
+			quickSort(a, key+1 ,top);
+		}
+	}
+
+	quickSort(a, 0, a.length-1);
+	console.log(a);
+</script>
+
+</head>
+<body>
+
+</body>
+</html>
