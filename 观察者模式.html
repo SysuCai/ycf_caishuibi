@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>观察者模式</title>
+</head>
+<body>
+<button id="change">改变状态</button>
+	<div class="container">
+	
+	</div>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript">
+		//观察者模式
+		//对每个被观察的对象，在状态发生改变的情况下，通知观察者们
+		//将一个系统分割成一个一些类相互协作的类有一个不好的副作用，那就是需要维护相关对象间的一致性。我们不希望为了维持一致性而使各类紧密耦合，这样会给维护、扩展和重用都带来不便。观察者就是解决这类的耦合关系的。
+		//其中还用到了构造器模式，原型模式
+
+
+		function Subject(state, observers) {
+			this.state = state;
+			this.observers = observers;
+		}
+
+		
+
+		Subject.prototype.addObserver = function(observer) {
+			this.observers.push(observer);
+		}
+
+		Subject.prototype.notify = function() {
+			for(var i = 0; i < this.observers.length ; i++ ){
+				this.observers[i].update(this.state);
+			}
+		}
+
+		Subject.prototype.setState = function(value) {
+			this.state = value
+			this.notify();
+		}
+
+		function Observer(name) {
+			this.name = name;
+		}
+
+		Observer.prototype.update = function(state) {
+			console.log(state);
+		}
+
+
+		var observers = [];
+		var observer1 = new Observer('Zhang san');
+		var observer2 = new Observer('Li si');
+		var observer3 = new Observer('Wang wu');
+		observers.push(observer1,observer2);
+		var subject1 = new Subject('unready',observers);
+		console.log(subject1.state);
+		subject1.addObserver(observer3);
+		
+
+		var html = '';
+		for(var i = 0 ; i < subject1.observers.length ; i++){
+			html += '<p>' + subject1.observers[i].name + ' is ' + subject1.state + '</p>';
+		}
+		$('.container').html(html);
+
+		$('#change').on('click', function() {
+			subject1.setState('ready');
+			// subject1.notify(subject1.observers);
+			var html = '';
+			for(var i = 0 ; i < subject1.observers.length ; i++){
+				html += '<p>' + subject1.observers[i].name + ' is ' + subject1.state + '</p>';
+			}
+			$('.container').html(html);
+		});
+
+
+	</script>
+</body>
+</html>
