@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>适配器模式</title>
+</head>
+<body>
+	<script type="text/javascript">
+		//理解适配器模式
+		//相当于你原有的东西，不想改动，但是想要用，现有的条件又不满足，所以你做了一个适配器来使它变得满足
+		//比如你有一个插座，是两孔的，但是你想要把空调插头插上去，空调插头是需要三孔的，那怎么办？上淘宝买个三孔转两孔的适配器吧！
+		function chazuo(chatou){
+			if(chatou.foot == 2)
+			// alert('OK');
+			document.write('OK');
+			else 
+			// alert('NO OK!');
+			document.write('NO OK');
+		}
+
+		var kongtiao = {
+			chatou : {
+				foot : 3
+			}
+		}
+
+		function adapter(chatou) {
+			if(chatou.foot == 3){
+				chatou.foot = 2; // By a magic way.
+			}
+			document.write('<br>  After adapter  ');
+			return chatou;
+		}
+
+		chazuo(kongtiao.chatou);
+
+		chazuo(adapter(kongtiao.chatou));
+
+
+	</script>
+</body>
+</html>
